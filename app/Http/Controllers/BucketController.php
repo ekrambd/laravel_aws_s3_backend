@@ -17,12 +17,12 @@ class BucketController extends Controller
     protected $bucket;
 
     public function __construct(BucketInterface $bucket)
-    {
+    {   
         $this->middleware('auth_check');
         $this->bucket = $bucket;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //
     }
@@ -32,7 +32,7 @@ class BucketController extends Controller
      */
     public function create()
     {
-        //
+        return view('buckets.create');
     }
 
     /**
@@ -40,7 +40,25 @@ class BucketController extends Controller
      */
     public function store(StoreBucketRequest $request)
     {
-        //
+        $response = $this->bucket->store($request);
+        $data = $response->getData(true);
+        if($data['status'])
+        {
+            $notification = array(
+                'messege'=>$data['message'],
+                'alert-type'=>'success'
+            );
+
+            return redirect()->back()->with($notification); 
+        }
+
+        $notification = array(
+            'messege'=>$data['message'],
+            'alert-type'=>'error'
+        );
+
+        return redirect()->back()->with($notification);
+
     }
 
     /**

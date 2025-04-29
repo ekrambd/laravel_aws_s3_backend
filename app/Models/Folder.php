@@ -5,15 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bucket extends Model
+class Folder extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'bucket_name',
-        'bucket_slug',
-        'status',
-    ];
-
 }

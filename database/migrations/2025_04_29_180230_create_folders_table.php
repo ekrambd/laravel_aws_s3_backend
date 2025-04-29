@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('folders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('bucket_id');
-            $table->integer('folder_id');
-            $table->string('title')->unique();
-            $table->string('file');
-            $table->string('extension');
-            $table->string('file_size');
-            $table->enum('status', ['Public', 'Private']);
+            $table->string('folder_name')->unique();
+            $table->enum('status', ['Active', 'Inactive']);
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('folders');
     }
 };
