@@ -40,8 +40,9 @@
                       id="bucket_name"
                       placeholder="Bucket Name"
                       required=""
+                      value="{{old('bucket_name')}}"
                     />
-                    @error('category_name')
+                    @error('bucket_name')
                       <p class="alert alert-danger">{{ $message }}</p>
                     @enderror
                   </div>

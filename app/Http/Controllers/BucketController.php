@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreBucketRequest;
 use App\Http\Requests\UpdateBucketRequest;
 use App\Repositories\Bucket\BucketInterface;
+use DataTables;
 
 class BucketController extends Controller
 {
@@ -24,7 +25,22 @@ class BucketController extends Controller
 
     public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+                $buckets = $this->bucket->fetch()->where('user_id',user()->id)->latest();
+                return DataTables::of($buckets)
+                    ->addIndexColumn()
+
+                    ->addColumn('action', function ($row) {
+                        $btn = "";
+                        $btn .= ' <a href="' . route('buckets.show', $row->id) . '" class="btn btn-primary btn-sm action-button edit-product-bucket"><i class="fa fa-edit"></i></a>';
+                        $btn .= '&nbsp;';
+                        $btn .= ' <a href="#" class="btn btn-danger btn-sm delete-bucket action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action']) 
+                    ->make(true);
+        }
+        return view('buckets.index'); 
     }
 
     /**
@@ -66,7 +82,7 @@ class BucketController extends Controller
      */
     public function show(Bucket $bucket)
     {
-        //
+        return view('buckets.edit', compact('bucket'));
     }
 
     /**
@@ -82,7 +98,24 @@ class BucketController extends Controller
      */
     public function update(UpdateBucketRequest $request, Bucket $bucket)
     {
-        //
+        $response = $this->bucket->update($request,$bucket);
+        $data = $response->getData(true);
+        if($data['status'])
+        {
+            $notification = array(
+                'messege'=>$data['message'],
+                'alert-type'=>'success'
+            );
+
+            return redirect()->route('buckets.index')->with($notification); 
+        }
+
+        $notification = array(
+            'messege'=>$data['message'],
+            'alert-type'=>'error'
+        );
+
+        return redirect()->back()->with($notification);
     }
 
     /**
@@ -90,6 +123,7 @@ class BucketController extends Controller
      */
     public function destroy(Bucket $bucket)
     {
-        //
+        $delete = $this->bucket->delete($bucket);
+        return $delete;
     }
 }
