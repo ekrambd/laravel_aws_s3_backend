@@ -22,7 +22,9 @@ class StoreFolderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'folder_name' => 'required|string|max:50|unique:folders',
+            'bucket_id'   => 'required|integer|exists:buckets,id',
+            'status'      => 'required|in:Public,Private',
         ];
     }
 }

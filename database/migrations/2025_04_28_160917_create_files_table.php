@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('file');
             $table->string('extension');
             $table->string('file_size');
+            $table->string('bucket_url');
             $table->enum('status', ['Public', 'Private']);
             $table->timestamps();
         });

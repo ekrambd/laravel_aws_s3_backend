@@ -16,4 +16,9 @@ class Bucket extends Model
         'status',
     ];
 
+    public function folders()
+    {
+        return $this->hasMany(Folder::class);
+    }
+
 }

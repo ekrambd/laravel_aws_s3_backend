@@ -64,6 +64,11 @@
     
     <link rel="stylesheet" type="text/css" href="{{asset('backend/datatable/css/responsive.bootstrap4.min.css')}}">
 
+    <!-- Select2 -->
+   <link rel="stylesheet" href="{{asset('backend/plugins/select2/css/select2.min.css')}}">
+
+   <link rel="stylesheet" href="{{asset('backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
  
   </head>
   <!--end::Head-->
@@ -196,6 +201,32 @@
                   </li>
                 </ul>
               </li>
+
+
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-box"></i>
+                  <p>
+                    Folders
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{route('folders.create')}}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Add Folder</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('folders.index')}}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>All Folder</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-clipboard-fill"></i>
@@ -602,7 +633,8 @@
 
   <script src="{{asset('backend/datatable/js/dataTables.buttons.min.js')}}"></script>
 
-
+  <!-- Select2 -->
+  <script src="{{asset('backend/plugins/select2/js/select2.full.min.js')}}"></script>
 
   <script src="{{asset('backend/datatable/js/dataTables.bootstrap4.min.js')}}"></script>
 

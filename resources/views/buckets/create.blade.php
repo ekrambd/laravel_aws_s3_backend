@@ -49,7 +49,7 @@
 
                   <div class="mb-3">
                     <label for="status" class="form-label">Status <span class="required">*</span></label>
-                    <select class="form-control" name="status" id="status" required>
+                    <select class="form-control select2bs4" name="status" id="status" required>
                       <option value="" selected="" disabled="">Select Status</option>
                       <option value="Public">Public</option>
                       <option value="Private">Private</option>

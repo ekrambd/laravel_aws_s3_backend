@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('folders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('bucket_id');
             $table->string('folder_name')->unique();
-            $table->enum('status', ['Active', 'Inactive']);
+            $table->enum('status', ['Public', 'Private']);
             $table->timestamps();
         });
     }

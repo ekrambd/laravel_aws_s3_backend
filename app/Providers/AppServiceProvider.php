@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use App\Repositories\Bucket\BucketInterface;
 use App\Repositories\Bucket\BucketRepository;
+use App\Repositories\Folder\FolderInterface;
+use App\Repositories\Folder\FolderRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(BucketInterface::class, BucketRepository::class);
+        $this->app->bind(FolderInterface::class, FolderRepository::class);
     }
 
     /**

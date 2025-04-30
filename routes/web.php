@@ -5,6 +5,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BucketController;
+use App\Http\Controllers\FolderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,11 @@ Route::get('/admin-logout', [AccessController::class, 'adminLogout'])->name('adm
 
 Route::group(['middleware' => 'prevent-back-history'],function(){
    //dashboard
-	Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+	 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
    
    //buckets
-	Route::resource('buckets', BucketController::class);
+	 Route::resource('buckets', BucketController::class);
 
+	//folders
+	 Route::resource('folders', FolderController::class);
 });

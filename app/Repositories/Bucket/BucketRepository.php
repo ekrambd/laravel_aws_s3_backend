@@ -138,7 +138,7 @@
 	            'visibility' => $visibility,
 	        ]);
 
-	    } catch (\Exception $e) {
+	    }catch (Exception $e) {
 	        return response()->json([
 	            'status' => false,
 	            'code' => $e->getCode(),

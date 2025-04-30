@@ -34,7 +34,7 @@ class BucketController extends Controller
                         $btn = "";
                         $btn .= ' <a href="' . route('buckets.show', $row->id) . '" class="btn btn-primary btn-sm action-button edit-product-bucket"><i class="fa fa-edit"></i></a>';
                         $btn .= '&nbsp;';
-                        $btn .= ' <a href="#" class="btn btn-danger btn-sm delete-bucket action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></a>';
+                        $btn .= ' <button type="button" class="btn btn-danger btn-sm delete-bucket action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>';
                         return $btn;
                     })
                     ->rawColumns(['action']) 
