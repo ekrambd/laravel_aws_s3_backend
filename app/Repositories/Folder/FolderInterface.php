@@ -5,6 +5,6 @@
  {
  	public function fetch();
  	public function store($request);
- 	public function update($request,$folder);
+ 	public function statusUpdate($request);
  	public function delete($folder);
  }

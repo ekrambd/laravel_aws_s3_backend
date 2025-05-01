@@ -29,15 +29,18 @@ class FolderController extends Controller
                 $folders = $this->folder->fetch()->where('user_id',user()->id)->latest();
                 return DataTables::of($folders)
                     ->addIndexColumn()
-
+                    ->addColumn('bucket', function ($row) {
+                        return $row->bucket->bucket_name;
+                    })
+                    ->addColumn('status', function($row){
+                        return '<label class="switch"><input class="' . ($row->status == 'Active' ? 'active-folder' : 'decline-folder') . '" id="status-folder-update"  type="checkbox" ' . ($row->status == 'Active' ? 'checked' : '') . ' data-id="'.$row->id.'"><span class="slider round"></span></label>';
+                    })
                     ->addColumn('action', function ($row) {
                         $btn = "";
-                        $btn .= ' <a href="' . route('folders.show', $row->id) . '" class="btn btn-primary btn-sm action-button edit-product-folder"><i class="fa fa-edit"></i></a>';
-                        $btn .= '&nbsp;';
                         $btn .= ' <button type="button" class="btn btn-danger btn-sm delete-folder action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>';
                         return $btn;
                     })
-                    ->rawColumns(['action']) 
+                    ->rawColumns(['action','bucket','status']) 
                     ->make(true);
         }
         return view('folders.index');
@@ -122,7 +125,7 @@ class FolderController extends Controller
      */
     public function destroy(Folder $folder)
     {
-        $delete = $this->folder->delete();
+        $delete = $this->folder->delete($folder);
         return $delete;
     }
 }

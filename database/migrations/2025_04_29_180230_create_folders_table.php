@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('bucket_id');
             $table->string('folder_name')->unique();
-            $table->enum('status', ['Public', 'Private']);
+            $table->string('folder_slug')->unique();
+            $table->enum('status', ['Active', 'Inactive']);
             $table->timestamps();
         });
     }

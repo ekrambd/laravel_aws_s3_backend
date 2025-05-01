@@ -13,12 +13,13 @@ class Folder extends Model
         'user_id',
         'bucket_id',
         'folder_name',
+        'folder_slug',
         'status',
     ];
 
     public function bucket()
     {
-        return $this->belognsTo(Bucket::class);
+        return $this->belongsTo(Bucket::class);
     }
 
 }

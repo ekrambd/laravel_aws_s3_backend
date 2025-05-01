@@ -53,29 +53,14 @@
 	            'Bucket' => $bucketName,
 	            'Key'    => $folderName,
 	            'Body'   => '',
-	            'ACL'    => 'private', // Always private
 	        ]);
 
-	        // Tag the folder object if Public is needed
-	        if ($request->status == 'Public') {
-	            $this->s3Client->putObjectTagging([
-	                'Bucket' => $bucketName,
-	                'Key'    => $folderName,
-	                'Tagging' => [
-	                    'TagSet' => [
-	                        [
-	                            'Key'   => 'Public',
-	                            'Value' => 'true',
-	                        ],
-	                    ],
-	                ],
-	            ]);
-	        }
 
 	        Folder::create([
 	            'user_id'     => user()->id,
 	            'bucket_id'   => $request->bucket_id,
-	            'folder_name' => $folderName,
+	            'folder_name' => $request->folder_name,
+	            'folder_slug' => $folderName,
 	            'status'      => $request->status,
 	        ]);
 
@@ -97,30 +82,15 @@
 	}
 
 
- 	public function update($request,$folder)
+ 	public function statusUpdate($request)
  	{
  		try
         {   
 
-        	$folderName = $folder->folder_name;
-        	$bucketName = $folder->bucket->bucket_slug;
-
-        	if (substr($folderName, -1) !== '/') {
-	            $folderName .= '/';
-	        }
-
-	        // Upload empty object with public-read ACL
-	        $s3Client->putObject([
-	            'Bucket' => $bucketName,
-	            'Key'    => $folderName,
-	            'Body'   => '',
-	            'ACL'    => $request->status == 'Public'?'public-read':'private', // <-- public access
-	        ]);
-
-	        $folder->status = $request->status;
-	        $folder->update();
-
-	        return response()->json(['status'=>true,'message' => 'Successfully the file has been updated']);
+        	$folder = $this->fetch()->findorfail($request->folder_id);
+        	$folder->status = $request->status;
+        	$folder->update();
+	        return response()->json(['status' => true, 'message' => "Successfully the folder's status has been updated"]);
 
         }catch (\Aws\Exception\AwsException $e) {
             return response()->json([
@@ -137,13 +107,11 @@
  	{
  		try {
 	        
-	        $folderName = $folder->folder_name;
-
-	        $folderName = rtrim($folderName, '/') . '/';
+	        $folderName = $folder->folder_slug;
 
 	        $bucketName = $folder->bucket->bucket_slug;
 
-	        $objects = $s3Client->listObjectsV2([
+	        $objects = $this->s3Client->listObjectsV2([
 	            'Bucket' => $bucketName,
 	            'Prefix' => $folderName,
 	        ]);
@@ -156,7 +124,7 @@
 	            return ['Key' => $object['Key']];
 	        }, $objects['Contents']);
 
-	        $s3Client->deleteObjects([
+	        $this->s3Client->deleteObjects([
 	            'Bucket' => $bucketName,
 	            'Delete' => [
 	                'Objects' => $deleteKeys,

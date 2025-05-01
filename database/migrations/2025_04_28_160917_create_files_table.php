@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('bucket_id');
-            $table->integer('folder_id');
+            $table->integer('folder_id')->nullable();
             $table->string('title')->unique();
             $table->string('file');
             $table->string('extension');
