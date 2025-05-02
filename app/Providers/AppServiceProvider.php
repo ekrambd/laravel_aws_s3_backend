@@ -9,6 +9,8 @@ use App\Repositories\Bucket\BucketInterface;
 use App\Repositories\Bucket\BucketRepository;
 use App\Repositories\Folder\FolderInterface;
 use App\Repositories\Folder\FolderRepository;
+use App\Repositories\File\FileInterface;
+use App\Repositories\File\FileRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(BucketInterface::class, BucketRepository::class);
         $this->app->bind(FolderInterface::class, FolderRepository::class);
+        $this->app->bind(FileInterface::class, FileRepository::class);
     }
 
     /**

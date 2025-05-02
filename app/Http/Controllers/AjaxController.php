@@ -22,4 +22,10 @@ class AjaxController extends Controller
         $statusUpdate = $this->folder->statusUpdate($request);
         return $statusUpdate;
     }
+
+    public function bucketFolders(Request $request)
+    {
+        $folders = $this->folder->fetch()->where('bucket_id',$request->bucket_id)->where('status','Active')->get();
+        return response()->json($folders);
+    }
 }

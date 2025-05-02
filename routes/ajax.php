@@ -5,3 +5,4 @@ use App\Http\Controllers\AjaxController;
 
 //ajax requests
 Route::post('folder-status-update', [AjaxController::class, 'folderStatusUpdate']);
+Route::post('bucket-folders', [AjaxController::class, 'bucketFolders']);

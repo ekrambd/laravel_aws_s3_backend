@@ -3,16 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Repositories\File\FileInterface;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreFileRequest;
+use App\Http\Requests\UpdateFileRequest;
+use DataTables;
 
 class FileController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    protected $file;
+
+    public function __construct(FileInterface $file)
+    {   
+        $this->middleware('auth_check');
+        $this->file = $file;
+    }
+
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+                $files = $this->file->fetch()->where('user_id',user()->id)->latest();
+                return DataTables::of($files)
+                    ->addIndexColumn()
+                    ->addColumn('bucket', function ($row) {
+                        return $row->bucket->bucket_name;
+                    })
+                    ->addColumn('action', function ($row) {
+                        $btn = "";
+                        $btn .= ' <button type="button" class="btn btn-danger btn-sm delete-file action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action','bucket']) 
+                    ->make(true);
+        }
+        return view('files.index');
     }
 
     /**
@@ -20,15 +48,32 @@ class FileController extends Controller
      */
     public function create()
     {
-        //
+        return view('files.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFileRequest $request)
     {
-        //
+        $response = $this->file->store($request);
+        $data = $response->getData(true);
+        if($data['status'])
+        {
+            $notification = array(
+                'messege'=>$data['message'],
+                'alert-type'=>'success'
+            );
+
+            return redirect()->back()->with($notification); 
+        }
+
+        $notification = array(
+            'messege'=>$data['message'],
+            'alert-type'=>'error'
+        );
+
+        return redirect()->back()->with($notification);
     }
 
     /**
@@ -36,7 +81,7 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        //
+        return view('files.edit', compact('file'));
     }
 
     /**
@@ -50,9 +95,26 @@ class FileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, File $file)
+    public function update(UpdateFileRequest $request, File $file)
     {
-        //
+        $response = $this->file->update($request,$file);
+        $data = $response->getData(true);
+        if($data['status'])
+        {
+            $notification = array(
+                'messege'=>$data['message'],
+                'alert-type'=>'success'
+            );
+
+            return redirect()->route('files.index')->with($notification); 
+        }
+
+        $notification = array(
+            'messege'=>$data['message'],
+            'alert-type'=>'error'
+        );
+
+        return redirect()->back()->with($notification);
     }
 
     /**
@@ -60,6 +122,7 @@ class FileController extends Controller
      */
     public function destroy(File $file)
     {
-        //
+        $delete = $this->file->delete($file);
+        return $delete;
     }
 }

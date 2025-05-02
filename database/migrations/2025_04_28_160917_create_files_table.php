@@ -17,10 +17,10 @@ return new class extends Migration
             $table->integer('bucket_id');
             $table->integer('folder_id')->nullable();
             $table->string('title')->unique();
-            $table->string('file');
             $table->string('extension');
             $table->string('file_size');
             $table->string('bucket_url');
+            $table->string('storage_class');
             $table->enum('status', ['Public', 'Private']);
             $table->timestamps();
         });
