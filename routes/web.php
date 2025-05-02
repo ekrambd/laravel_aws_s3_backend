@@ -6,6 +6,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BucketController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 	//folders
 	 Route::resource('folders', FolderController::class);
+
+	//files
+	 Route::resource('files', FileController::class);
 });
