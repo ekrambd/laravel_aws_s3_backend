@@ -90,6 +90,7 @@
                   <div class="mb-3">
                   	<label for="file">File <span class="required">*</span></label>
                   	<input type="file" name="file" id="file" class="form-control" required>
+                    <progress id="progressBar" value="0" max="100"></progress>
                   	@error('file')
                       <p class="alert alert-danger">{{ $message }}</p>
                     @enderror
@@ -109,6 +110,8 @@
                   </div>
 
                   <div class="mb-3">
+                    <div id="progress"></div>
+                    <button type="button" id="upload-btn" class="btn btn-primary mt-3">Upload</button>
                     <button type="submit" class="btn btn-success">Submit</button>
                   </div>
 
@@ -130,6 +133,19 @@
 @push('scripts')
  <script>
    $(document).ready(function(){
+
+    const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB per chunk
+    let file, fileName, totalChunks, currentChunk = 0;
+
+    $('#file').on('change', function(e) {
+        file = e.target.files[0];
+        if (file) {
+            fileName = file.name;
+            totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+            uploadNextChunk();
+        }
+    });
+
    	 $(document).on('change', '#bucket_id', function(){
    	 	$('#folder_id').html('<option value="" selected="" disabled="">Select Folder</option>');
    	 	let bucket_id = $(this).val();
@@ -146,6 +162,44 @@
             }
         }); 
    	 });
+
+
+     function uploadNextChunk() {
+        const chunkStart = currentChunk * CHUNK_SIZE;
+        const chunkEnd = Math.min(chunkStart + CHUNK_SIZE, file.size);
+        const chunk = file.slice(chunkStart, chunkEnd);
+
+        const formData = new FormData();
+        formData.append('file', chunk);
+        formData.append('fileName', fileName);
+        formData.append('currentChunk', currentChunk);
+        formData.append('totalChunks', totalChunks);
+
+        // Send the chunk via AJAX
+        $.ajax({
+            url: "{{route('files.store')}}",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                 console.log(response);
+                currentChunk++;
+                const progress = Math.floor((currentChunk / totalChunks) * 100);
+                $('#progressBar').val(progress);
+
+                if (currentChunk < totalChunks) {
+                    uploadNextChunk(); // Upload next chunk
+                } else {
+                    alert('File upload complete!');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error uploading chunk: ', error);
+            }
+        });
+    }
+
    });	
  </script>
 @endpush

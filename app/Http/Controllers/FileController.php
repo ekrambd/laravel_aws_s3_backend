@@ -54,9 +54,10 @@ class FileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFileRequest $request)
+    public function store(Request $request)
     {
         $response = $this->file->store($request);
+        return $response;
         $data = $response->getData(true);
         if($data['status'])
         {
