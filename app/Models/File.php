@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     use HasFactory;
+
+    public function bucket()
+    {
+        return $this->belongsTo(Bucket::class);
+    }
+
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class);
+    }
 }

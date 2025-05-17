@@ -21,6 +21,12 @@
  	return $folderRepository;
  }
 
+ function fileRepository()
+ {
+ 	$fileRepository = app(\App\Repositories\File\FileRepository::class);
+ 	return $fileRepository;
+ }
+
  function buckets()
  {  
  	$buckets = bucketRepository()->fetch()->where('user_id',user()->id)->latest()->get();
@@ -31,6 +37,12 @@
  {
  	$bucket = bucketRepository()->fetch()->findorfail($bucket_id);
  	return $bucket;
+ }
+
+ function getFile($id)
+ {
+ 	$file = fileRepository()->fetch()->with('folder','bucket')->findorfail($id);
+ 	return $file;
  }
 
  function folders()

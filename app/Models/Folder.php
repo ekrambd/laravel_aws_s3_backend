@@ -22,4 +22,9 @@ class Folder extends Model
         return $this->belongsTo(Bucket::class);
     }
 
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }

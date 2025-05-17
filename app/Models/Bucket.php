@@ -21,4 +21,9 @@ class Bucket extends Model
         return $this->hasMany(Folder::class);
     }
 
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }

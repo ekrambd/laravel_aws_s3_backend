@@ -109,7 +109,7 @@ class FolderController extends Controller
                 'alert-type'=>'success'
             );
 
-            return redirect()->route('buckets.index')->with($notification); 
+            return redirect()->route('folders.index')->with($notification); 
         }
 
         $notification = array(

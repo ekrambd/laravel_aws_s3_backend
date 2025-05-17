@@ -17,11 +17,14 @@ return new class extends Migration
             $table->integer('bucket_id');
             $table->integer('folder_id')->nullable();
             $table->string('title')->unique();
-            $table->string('extension');
-            $table->string('file_size');
-            $table->string('bucket_url');
+            $table->string('temp_file_path')->nullable();
+            $table->string('extension')->nullable();
+            $table->string('file_size')->nullable();
+            $table->string('bucket_url')->nullable();
             $table->string('storage_class');
             $table->enum('status', ['Public', 'Private']);
+            $table->enum('file_importance', ['Low', 'Medium', 'High']);
+            $table->enum('upload_status', ['Pending', 'Uploaded']);
             $table->timestamps();
         });
     }

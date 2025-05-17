@@ -57,7 +57,6 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $response = $this->file->store($request);
-        return $response;
         $data = $response->getData(true);
         if($data['status'])
         {
@@ -66,7 +65,7 @@ class FileController extends Controller
                 'alert-type'=>'success'
             );
 
-            return redirect()->back()->with($notification); 
+            return redirect('/add-file/'.$data['file_id'])->with($notification); 
         }
 
         $notification = array(
@@ -125,5 +124,10 @@ class FileController extends Controller
     {
         $delete = $this->file->delete($file);
         return $delete;
+    }
+
+    public function addFile($id)
+    {
+        return view('files.add_file',compact('id'));
     }
 }

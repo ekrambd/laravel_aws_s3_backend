@@ -37,4 +37,6 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 	//files
 	 Route::resource('files', FileController::class);
+
+	 Route::get('/add-file/{id}', [FileController::class, 'addFile']);
 });
