@@ -7,4 +7,5 @@
  	public function store($request);
  	public function statusUpdate($request);
  	public function delete($file);
+ 	public function fileUpload($file);
  }

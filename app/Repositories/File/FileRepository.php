@@ -75,4 +75,9 @@
  			return response()->json(['status' => false, 'code' => $e->getCode(), 'message' => $e->getMessage()],500);
  		}
  	}
+
+    public function fileUpload($file)
+    {
+        //
+    }
  }
