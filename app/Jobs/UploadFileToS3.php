@@ -47,11 +47,13 @@ class UploadFileToS3 implements ShouldQueue
             ],
         ]);
 
+        $finalKey = $file->folder_id == NULL?$this->key:$file->folder->folder_slug.$this->key;
+
         try {
 
             $create = $s3Client->createMultipartUpload([
                 'Bucket' => $file->bucket->bucket_slug,
-                'Key' => $this->key,
+                'Key' => $finalKey,
                 'ContentType' => mime_content_type($this->localPath),
                 'StorageClass' => $file->storage_class,
                 'ACL' => $acl,
@@ -72,7 +74,7 @@ class UploadFileToS3 implements ShouldQueue
 
                 $uploadPart = $s3Client->uploadPart([
                     'Bucket' => $file->bucket->bucket_slug,
-                    'Key' => $this->key,
+                    'Key' => $finalKey, 
                     'UploadId' => $uploadId,
                     'PartNumber' => $partNumber,
                     'Body' => $data,
@@ -90,18 +92,20 @@ class UploadFileToS3 implements ShouldQueue
 
             $result = $s3Client->completeMultipartUpload([
                 'Bucket' => $file->bucket->bucket_slug,
-                'Key' => $this->key,
+                'Key' => $finalKey,
                 'UploadId' => $uploadId,
                 'MultipartUpload' => ['Parts' => $parts],
             ]);
 
-            File::where('id',$this->file_id)->update(['bucket_url'=>$result['Location']]);
+            $file->bucket_url = $result['Location'];
+            $file->file_key = $finalKey;
+            $file->update();
 
             if (file_exists($this->localPath)) {
                 unlink($this->localPath);
             }
 
-            \Log::info("Upload to S3 complete for: {$this->key}");
+            \Log::info("Upload to S3 complete for: {$finalKey}");
 
         } catch (\AwsException $e) {
             if (isset($uploadId)) {

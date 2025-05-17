@@ -67,7 +67,7 @@ class AjaxController extends Controller
                 //return response()->json($getFile);
                 $getFile->temp_file_path = $path;
                 $getFile->extension = $extension;
-                $getFile->file_size = $sizeInMB; // Save MB value
+                $getFile->file_size = $sizeInMB; // Save MB value 
 
                 $getFile->update();
 

@@ -78,8 +78,8 @@
                     {{-- Folder --}}
                     <div class="col-md-4">
                       <div class="mb-3">
-                        <label for="folder_id" class="form-label">Select Folder <span class="required">*</span></label>
-                        <select class="form-control select2bs4" name="folder_id" id="folder_id" required>
+                        <label for="folder_id" class="form-label">Select Folder</label>
+                        <select class="form-control select2bs4" name="folder_id" id="folder_id">
                           <option value="" disabled selected>Select Folder</option>
                         </select>
                         @error('folder_id')
