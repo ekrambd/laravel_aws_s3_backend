@@ -99,6 +99,7 @@ class UploadFileToS3 implements ShouldQueue
 
             $file->bucket_url = $result['Location'];
             $file->file_key = $finalKey;
+            $file->upload_status = 'Uploaded';
             $file->update();
 
             if (file_exists($this->localPath)) {

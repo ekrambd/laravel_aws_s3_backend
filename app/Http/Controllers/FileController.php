@@ -29,15 +29,31 @@ class FileController extends Controller
                 $files = $this->file->fetch()->where('user_id',user()->id)->latest();
                 return DataTables::of($files)
                     ->addIndexColumn()
+                    ->addColumn('folder', function ($row) {
+                        return $row->folder_id == NULL?"-":$row->folder->folder_slug;
+                    })
                     ->addColumn('bucket', function ($row) {
-                        return $row->bucket->bucket_name;
+                        return $row->bucket->bucket_slug;
+                    })
+
+                    ->addColumn('size', function ($row) {
+                        return $row->file_size." MB";
                     })
                     ->addColumn('action', function ($row) {
-                        $btn = "";
+                        $btn = ""; 
+                        $btn .= '&nbsp;';
+                        $btn .= ' <a href="' . route('files.show', $row->id) . '" class="btn btn-primary btn-sm action-button edit-product-file"><i class="fa fa-edit"></i></a>';
+                        $btn .= '&nbsp;';
+                        
                         $btn .= ' <button type="button" class="btn btn-danger btn-sm delete-file action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>';
+
+                        $btn .= '&nbsp;';
+                        
+                        $btn .= ' <a href="'.$row->bucket_url.'" target="__blank" class="btn btn-success btn-sm view-file action-button"><i class="fa fa-eye"></i></a>';
+
                         return $btn;
                     })
-                    ->rawColumns(['action','bucket']) 
+                    ->rawColumns(['action','bucket','folder','size']) 
                     ->make(true);
         }
         return view('files.index');
@@ -80,7 +96,8 @@ class FileController extends Controller
      * Display the specified resource.
      */
     public function show(File $file)
-    {
+    {   
+        return $file;
         return view('files.edit', compact('file'));
     }
 

@@ -69,8 +69,9 @@
  	public function delete($file)
  	{
  		try
- 		{
- 			//
+ 		{   
+ 			//$file->delete();
+            return response()->json(['status'=>true, 'message'=>'Successfully the file has been deleted']);
  		}catch(Exception $e){
  			return response()->json(['status' => false, 'code' => $e->getCode(), 'message' => $e->getMessage()],500);
  		}
