@@ -6,12 +6,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-6">
-          <h3 class="mb-0">Add File</h3>
+          <h3 class="mb-0">Edit File</h3>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-end">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Add File</li>
+            <li class="breadcrumb-item active">Edit File</li>
           </ol>
         </div>
       </div>
@@ -22,19 +22,20 @@
         <div class="row g-4">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-header bg-primary text-light">
-                <div class="card-title">Add File</div>
+              <div class="card-header bg-success text-light">
+                <div class="card-title">Edit File</div>
               </div>
 
-              <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
+              <form action="{{ route('files.update',$file->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PATCH')
                 <div class="card-body">
                   <div class="row">
                     {{-- Title --}}
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="title" class="form-label">Title <span class="required">*</span></label>
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Title" required value="{{ old('title') }}">
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Title" required readonly value="{{ old('title',$file->title) }}">
                         @error('title')
                           <p class="alert alert-danger">{{ $message }}</p>
                         @enderror
@@ -45,13 +46,13 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="storage_class" class="form-label">Select Storage Class <span class="required">*</span></label>
-                        <select class="form-control select2bs4" name="storage_class" id="storage_class" required>
+                        <select class="form-control select2bs4" name="storage_class" id="storage_class" required disabled>
                           <option value="" disabled selected>Select Storage Class</option>
-                          <option value="STANDARD">STANDARD</option>
-                          <option value="INTELLIGENT_TIERING">INTELLIGENT_TIERING</option>
-                          <option value="ONEZONE_IA">ONEZONE_IA</option>
-                          <option value="GLACIER">GLACIER</option>
-                          <option value="DEEP_ARCHIVE">DEEP_ARCHIVE</option>
+                          <option value="STANDARD" <?php if($file->storage_class == 'STANDARD'){echo "selected";} ?>>STANDARD</option>
+                          <option value="INTELLIGENT_TIERING" <?php if($file->storage_class == 'INTELLIGENT_TIERING'){echo "selected";} ?>>INTELLIGENT_TIERING</option>
+                          <option value="ONEZONE_IA" <?php if($file->storage_class == 'ONEZONE_IA'){echo "selected";} ?>>ONEZONE_IA</option>
+                          <option value="GLACIER" <?php if($file->storage_class == 'GLACIER'){echo "selected";} ?>>GLACIER</option>
+                          <option value="DEEP_ARCHIVE" ?php if($file->storage_class == 'DEEP_ARCHIVE'){echo "selected";} ?>>DEEP_ARCHIVE</option>
                         </select>
                         @error('storage_class')
                           <p class="alert alert-danger">{{ $message }}</p>
@@ -63,10 +64,10 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="bucket_id" class="form-label">Select Bucket <span class="required">*</span></label>
-                        <select class="form-control select2bs4" name="bucket_id" id="bucket_id" required>
+                        <select class="form-control select2bs4" name="bucket_id" id="bucket_id" disabled required>
                           <option value="" disabled selected>Select Bucket</option>
                           @foreach (buckets() as $bucket)
-                            <option value="{{ $bucket->id }}">{{ $bucket->bucket_name }}</option>
+                            <option value="{{ $bucket->id }}" <?php if($file->bucket_id == $bucket->id){echo "selected";} ?>>{{ $bucket->bucket_name }}</option>
                           @endforeach
                         </select>
                         @error('bucket_id')
@@ -79,8 +80,11 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="folder_id" class="form-label">Select Folder</label>
-                        <select class="form-control select2bs4" name="folder_id" id="folder_id">
+                        <select class="form-control select2bs4" name="folder_id" id="folder_id" disabled>
                           <option value="" disabled selected>Select Folder</option>
+                          @foreach(folders() as $folder)
+                            <option value="{{$folder->id}}" <?php if($file->folder_id == $folder->id){echo "selected";} ?>>{{$folder->folder_name}}</option>
+                          @endforeach
                         </select>
                         @error('folder_id')
                           <p class="alert alert-danger">{{ $message }}</p>
@@ -94,8 +98,8 @@
                         <label for="status" class="form-label">Status <span class="required">*</span></label>
                         <select class="form-control select2bs4" name="status" id="status" required>
                           <option value="" disabled selected>Select Status</option>
-                          <option value="Public">Public</option>
-                          <option value="Private">Private</option>
+                          <option value="Public" <?php if($file->status == 'Public'){echo "selected";} ?>>Public</option>
+                          <option value="Private" <?php if($file->status == 'Private'){echo "selected";} ?>>Private</option>
                         </select>
                         @error('status')
                           <p class="alert alert-danger">{{ $message }}</p>
@@ -109,9 +113,9 @@
                         <label for="file_importance" class="form-label">Importance Level <span class="required">*</span></label>
                         <select class="form-control select2bs4" name="file_importance" id="importance_level" required>
                           <option value="" disabled selected>Choose Option</option>
-                          <option value="Low">Low</option>
-                          <option value="Medium">Medium</option>
-                          <option value="High">High</option>
+                          <option value="Low" <?php if($file->file_importance == 'Low'){echo "selected";} ?>>Low</option>
+                          <option value="Medium" <?php if($file->file_importance == 'Medium'){echo "selected";} ?>>Medium</option>
+                          <option value="High" <?php if($file->file_importance == 'High'){echo "selected";} ?>>High</option>
                         </select>
                         @error('file_importance')
                           <p class="alert alert-danger">{{ $message }}</p>
@@ -122,10 +126,7 @@
 
                   {{-- Buttons --}}
                   <div class="mb-3">
-                    <button type="submit" class="btn btn-success w-100" id="nxt-btn">Next Step <i class="fa fa-forward"></i></button>
-                    <button type="button" class="btn btn-warning w-100 my-2 text-light" id="backButton">
-                      <strong><i class="fa fa-backward"></i> Back to previous</strong>
-                    </button>
+                    <button type="submit" class="btn btn-success w-100">Save Changes</button>
                   </div>
                 </div>
               </form>
@@ -141,8 +142,6 @@
 @push('scripts')
 <script>
   $(document).ready(function () {
-    // Dynamically load folders for selected bucket
-    let bucketStatus;
     $('#bucket_id').on('change', function () {
       const bucketId = $(this).val();
       $('#folder_id').html('<option value="" selected disabled>Loading folders...</option>');
@@ -155,8 +154,6 @@
         },
         dataType: "json",
         success: function (response) {
-          console.log(response);
-          bucketStatus = response.bucket.status;
           $('#folder_id').empty().append('<option value="" selected disabled>Select Folder</option>');
           response.folders.forEach(folder => {
             $('#folder_id').append(`<option value="${folder.id}">${folder.folder_name}</option>`);
@@ -168,16 +165,6 @@
       });
     });
 
-    $(document).on('change','#status',function(){
-      let status = $(this).val();
-      if(bucketStatus == 'Private' && status == 'Public')
-      {
-          toastr.error("Sorry you can't upload a public file in the private bucket");
-          $('#nxt-btn').prop('disabled',true);
-      }else{
-        $('#nxt-btn').prop('disabled',false);
-      }
-    });
 
     // Back button
     $('#backButton').on('click', function (e) {

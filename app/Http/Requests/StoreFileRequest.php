@@ -25,7 +25,6 @@ class StoreFileRequest extends FormRequest
             'bucket_id' => 'required|integer',
             'folder_id' => 'nullable|integer',
             'title' => 'required|string|max:50|unique:files',
-            'file' => 'required',
             'storage_class' => 'required|in:STANDARD,INTELLIGENT_TIERING,ONEZONE_IA,GLACIER,DEEP_ARCHIVE',
             'status' => 'required|in:Public,Private',
             'file_importance' => 'required|in:Low,Medium,High',

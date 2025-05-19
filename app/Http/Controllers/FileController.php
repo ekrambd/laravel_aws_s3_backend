@@ -97,7 +97,6 @@ class FileController extends Controller
      */
     public function show(File $file)
     {   
-        return $file;
         return view('files.edit', compact('file'));
     }
 

@@ -96,7 +96,7 @@
         file_id = $(this).data('id');
         if (confirm('Do you want to delete this folder?')) {
             $.ajax({
-                url: "{{ url('/folders') }}/" + file_id,
+                url: "{{ url('/files') }}/" + file_id,
                 type: "DELETE",
                 dataType: "json",
                 success: function(data) {
@@ -119,7 +119,7 @@
           data:{'file_id':file_id, 'status':status_val},
           dataType:"json",
           success:function(data) {
-
+              console.log(data);
               toastr.success(data.message);
 
               $('.data-table').DataTable().ajax.reload(null, false);

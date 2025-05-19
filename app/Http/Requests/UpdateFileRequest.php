@@ -22,7 +22,10 @@ class UpdateFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            //'bucket_id' => 'required|integer|exists:buckets,id',
+            'status' => 'required|in:Public,Private',
+            'file_importance' => 'required|in:Low,Medium,High',
+            //'storage_class' => 'required|in:STANDARD,INTELLIGENT_TIERING,ONEZONE_IA,GLACIER,DEEP_ARCHIVE',
         ];
     }
 }

@@ -56,3 +56,15 @@
  	$folder = Folder::findorfail($folder_id);
  	return $folder;
  }
+
+ function checkBucket($request,$bucket_id)
+ {
+ 	$bucket = bucket($bucket_id);
+    if($bucket->status == 'Private' && $request->status == 'Public')
+    {
+        return true;
+    }
+    return false;
+ }
+
+ 

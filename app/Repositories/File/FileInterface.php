@@ -5,7 +5,8 @@
  {
  	public function fetch();
  	public function store($request);
+ 	public function update($request,$file);
  	public function statusUpdate($request);
  	public function delete($file);
- 	public function fileUpload($file);
+ 	public function uploadFile($request);
  }
