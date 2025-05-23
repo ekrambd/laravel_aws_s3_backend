@@ -221,4 +221,25 @@
             return response()->json(['status'=>false, 'code'=>$e->getCode(), 'message'=>$e->getMessage()],500);
         }
     }
+
+    public function cancelUpload($request)
+    {
+        try
+        {
+            $fileId = $request->input('file_id');
+
+            // You may customize this path depending on how Resumable chunks are stored
+            $chunkPath = storage_path("app/chunks/{$fileId}");
+
+            if (is_dir($chunkPath)) {
+                \File::deleteDirectory($chunkPath);
+                return response()->json(['message' => 'Chunks deleted'], 200);
+            }
+
+            return response()->json(['message' => 'No chunks to delete'], 404);
+
+        }catch(Exception $e){
+            return response()->json(['status'=>false, 'code'=>$e->getCode(), 'message'=>$e->getMessage()],500);
+        }
+    }
  }

@@ -143,7 +143,11 @@ class FileController extends Controller
     }
 
     public function addFile($id)
-    {
+    {   
+        if(checkFile($id))
+        {
+            return redirect('/files');
+        }
         return view('files.add_file',compact('id'));
     }
 }

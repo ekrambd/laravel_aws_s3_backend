@@ -9,4 +9,5 @@
  	public function statusUpdate($request);
  	public function delete($file);
  	public function uploadFile($request);
+ 	public function cancelUpload($request);
  }

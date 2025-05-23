@@ -2,6 +2,7 @@
  
  use App\Models\Bucket;	
  use App\Models\Folder;
+ use App\Models\File;
 
  function user()
  {
@@ -61,6 +62,16 @@
  {
  	$bucket = bucket($bucket_id);
     if($bucket->status == 'Private' && $request->status == 'Public')
+    {
+        return true;
+    }
+    return false;
+ }
+
+ function checkFile($id)
+ {
+    $check = File::where('id',$id)->where('temp_file_path','!=',NULL)->orWhere('bucket_url','!=',NULL)->first();
+    if($check)
     {
         return true;
     }
