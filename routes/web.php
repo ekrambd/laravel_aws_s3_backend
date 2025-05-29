@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BucketController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 	 Route::resource('files', FileController::class);
 
 	 Route::get('/add-file/{id}', [FileController::class, 'addFile']);
+
+	//users
+	 Route::resource('users', UserController::class);
 });
