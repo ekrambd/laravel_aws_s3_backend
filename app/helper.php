@@ -70,10 +70,10 @@
 
  function checkFile($id)
  {
-    $check = File::where('id',$id)->where('temp_file_path','!=',NULL)->orWhere('bucket_url','!=',NULL)->first();
+    $check = File::where('id',$id)->where('upload_status','Pending')->first();
     if($check)
     {
-        return true;
+      return true;
     }
     return false;
  }

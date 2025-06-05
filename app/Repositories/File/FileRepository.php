@@ -140,16 +140,6 @@
         ]);
     }
 
- 	public function statusUpdate($request)
- 	{
- 		try
- 		{
- 			//
- 		}catch(Exception $e){
- 			return response()->json(['status' => false, 'code' => $e->getCode(), 'message' => $e->getMessage()],500);
- 		}
- 	}
-
  	public function delete($file)
  	{
  		try

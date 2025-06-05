@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Uploadlimit extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'max_upload',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
 }

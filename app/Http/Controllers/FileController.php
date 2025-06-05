@@ -74,7 +74,7 @@ class FileController extends Controller
     {
         $response = $this->file->store($request);
         $data = $response->getData(true);
-        if($data['status'])
+        if($data['status'] == true)
         {
             $notification = array(
                 'messege'=>$data['message'],
@@ -142,9 +142,9 @@ class FileController extends Controller
         return $delete;
     }
 
-    public function addFile($id)
+    public function addFile($id) 
     {   
-        if(checkFile($id))
+        if(!checkFile($id))
         {
             return redirect('/files');
         }

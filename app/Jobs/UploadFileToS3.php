@@ -50,7 +50,9 @@ class UploadFileToS3 implements ShouldQueue
         $finalKey = $file->folder_id == NULL?$this->key:$file->folder->folder_slug.$this->key;
 
         try {
-
+            $file->upload_status = 'Pending';
+            $file->update();
+            
             $create = $s3Client->createMultipartUpload([
                 'Bucket' => $file->bucket->bucket_slug,
                 'Key' => $finalKey,

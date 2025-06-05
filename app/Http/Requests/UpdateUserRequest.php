@@ -24,6 +24,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email,' . $this->user->id,
+            'phone' => 'nullable|string|unique:users,phone,' . $this->user->id,
             'status' => 'required|in:Active,Inactive',
             'max_upload' => 'required|numeric',
             'image' => 'nullable',
