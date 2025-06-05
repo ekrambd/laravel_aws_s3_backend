@@ -28,7 +28,7 @@
             <div class="col-md-12">
              <div class="card">
                <div class="card-header bg-primary text-light"><div class="card-title">Add Folder</div></div>
-              <form action="{{route('folders.store')}}" method="POST">
+              <form action="{{route('folders.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="mb-3">

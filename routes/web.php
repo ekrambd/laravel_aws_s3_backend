@@ -7,7 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BucketController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +41,9 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 	 Route::get('/add-file/{id}', [FileController::class, 'addFile']);
 
-	//users
-	 Route::resource('users', UserController::class);
+	//settings
+	 Route::get('/change-password', [SettingController::class, 'changePassword']);
+	 Route::post('password-change', [SettingController::class, 'passwordChange']);
+	 Route::get('/profile-settings', [SettingController::class, 'profileSettings']);
+	 Route::post('settings-profile', [SettingController::class, 'settingsProfile']);
 });
